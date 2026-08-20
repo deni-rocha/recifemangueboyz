@@ -10,13 +10,13 @@ export function StartMenu({ isOpen, onClose, onNavigate }: StartMenuProps) {
         <div className="w-12 h-12 rounded border-2 border-white/60 bg-linear-to-br from-yellow-300 to-red-400 flex items-center justify-center text-2xl">
           😎
         </div>
-        <span className="text-white font-['VT323'] text-xl drop-shadow-[1px_1px_2px_rgba(0,0,0,0.3)]">
+        <span className="text-white font-sans text-xl drop-shadow-[1px_1px_2px_rgba(0,0,0,0.3)]">
           visitante
         </span>
       </div>
       <div className="grid grid-cols-2 min-h-[280px]">
         <div className="bg-white p-2 border-r border-[#D5D2C5]">
-          <div className="font-['VT323'] text-base text-gray-500 px-2 pb-1 border-b border-[#D5D2C5] mb-1">
+          <div className="font-sans text-base text-gray-500 px-2 pb-1 border-b border-[#D5D2C5] mb-1">
             Programas
           </div>
           <MenuItem
@@ -41,7 +41,7 @@ export function StartMenu({ isOpen, onClose, onNavigate }: StartMenuProps) {
           />
         </div>
         <div className="bg-[#D3E5FA] p-2">
-          <div className="font-['VT323'] text-base text-gray-600 px-2 pb-1 border-b border-[#B8CCE5] mb-1">
+          <div className="font-sans text-base text-gray-600 px-2 pb-1 border-b border-[#B8CCE5] mb-1">
             Sistema
           </div>
           <MenuItem
@@ -54,7 +54,7 @@ export function StartMenu({ isOpen, onClose, onNavigate }: StartMenuProps) {
       <div className="bg-linear-to-b from-[#0058EE] to-[#2A72E0] p-1.5 flex justify-end gap-2">
         <button
           onClick={onClose}
-          className="font-['VT323'] text-sm px-4 py-1.5 bg-[#3C6CC6] border border-black/30 rounded text-white hover:brightness-110 flex items-center gap-1"
+          className="font-sans text-sm px-4 py-1.5 bg-[#3C6CC6] border border-black/30 rounded text-white hover:brightness-110 flex items-center gap-1"
         >
           ↩ Fechar
         </button>

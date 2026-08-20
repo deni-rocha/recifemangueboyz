@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { XPWindow, StartMenu, Taskbar } from "./componentes";
+import { XPWindow, StartMenu, Taskbar, Postagem } from "./componentes";
 
 const sections = ["início", "sobre", "projetos", "impacto"];
 
 export default function App() {
-  const titles = ["RECIFEMANGUEBOYZ", "MANGUEBIT", "8BIT"];
+  const titles = ["RECIFEMANGUEBOYZ", "MANGUEBIT"];
   const [titleIdx, setTitleIdx] = useState(0);
   const [animKey, setAnimKey] = useState(0);
 
@@ -24,7 +24,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#3A6EA5] bg-linear-to-b from-[#3A6EA5] via-[#6BAFE5] to-[#4A9E35] pb-10 font-['VT323'] overflow-x-hidden">
+    <div className="min-h-screen bg-[#3A6EA5] bg-linear-to-b from-[#3A6EA5] via-[#6BAFE5] to-[#4A9E35] pb-10 overflow-x-hidden">
       <div className="max-w-[960px] mx-auto px-5 pt-6 pb-3">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-2 mb-4">
           <style>{`
@@ -56,7 +56,7 @@ export default function App() {
             <button
               key={s}
               onClick={() => handleNav(s)}
-              className={`px-4 py-1.5 border-2 border-[#919B9C] border-b-0 rounded-t-md cursor-pointer transition-colors font-['VT323'] text-lg ${
+              className={`px-4 py-1.5 border-2 border-[#919B9C] border-b-0 rounded-t-md cursor-pointer transition-colors font-sans text-lg ${
                 currentSection === s
                   ? "bg-white text-[#0054E3] border-[#0054E3] font-bold z-[2]"
                   : "bg-[#ECE9D8] text-gray-600 hover:bg-white hover:text-[#0054E3]"
@@ -68,7 +68,7 @@ export default function App() {
                   ? "ℹ️"
                   : s === "projetos"
                     ? "🛠️"
-                    : "🌿"}{" "}
+                    : "🌿"}{ " "}
               {s}
             </button>
           ))}
@@ -85,10 +85,10 @@ export default function App() {
             <div className="bg-white border-2 border-[#0054E3] p-6 min-h-[200px] space-y-4">
               {currentSection === "início" && (
                 <>
-                  <div className="font-['Press_Start_2P'] text-[11px] text-gray-600 leading-relaxed">
+                  <div className="font-sans font-bold text-xl text-gray-600 leading-relaxed">
                     🌍 RECIFEMANGUEBOYZ (RMBYZ)
                   </div>
-                  <p className="font-['VT323'] text-lg text-gray-700 leading-relaxed">
+                  <p className="font-sans text-lg text-gray-700 leading-relaxed">
                     O Recifemangueboyz (ou RMBYZ) é um coletivo sociocultural e
                     ambiental atuante no Recife e região metropolitana. Fundado em
                     2020, o grupo foca na inclusão, preservação ambiental e no
@@ -97,21 +97,23 @@ export default function App() {
                     comunidades locais.
                   </p>
                   <div className="border-2 border-[#ECE9D8] border-dashed p-3 mt-4">
-                    <div className="font-['VT323'] text-base text-gray-500 mb-2">
+                    <div className="font-sans text-base text-gray-500 mb-2">
                       🎯 Nossas frentes de atuação
                     </div>
-                    <ul className="font-['VT323'] text-base text-gray-700 space-y-1 list-none">
+                    <ul className="font-sans text-base text-gray-700 space-y-1 list-none">
                       <li>🌿 → Preservação ambiental e ações climáticas</li>
                       <li>🤝 → Inclusão social e fortalecimento de identidades</li>
                       <li>🎨 → Intervenções artísticas em comunidades</li>
                       <li>🏹 → Valorização das culturas periféricas e indígenas</li>
                     </ul>
                   </div>
+
+                  <Postagem />
                 </>
               )}
               {currentSection === "sobre" && (
-                <div className="font-['VT323'] text-lg text-gray-700 leading-relaxed space-y-3">
-                  <div className="font-['Press_Start_2P'] text-[11px] text-gray-600">
+                <div className="text-lg text-gray-700 leading-relaxed space-y-3">
+                  <div className="text-xl font-bold text-gray-600">
                     📖 SOBRE O RMBYZ
                   </div>
                   <p>
@@ -133,12 +135,12 @@ export default function App() {
                 </div>
               )}
               {currentSection === "projetos" && (
-                <div className="font-['VT323'] text-lg text-gray-700 leading-relaxed space-y-3">
-                  <div className="font-['Press_Start_2P'] text-[11px] text-gray-600">
+                <div className="font-sans text-lg text-gray-700 leading-relaxed space-y-3">
+                  <div className="font-sans font-bold text-xl text-gray-600">
                     🛠️ PROJETOS
                   </div>
                   <div className="border-2 border-[#ECE9D8] border-dashed p-3">
-                    <div className="font-['VT323'] text-base text-gray-500 mb-2">
+                    <div className="font-sans text-base text-gray-500 mb-2">
                       🌿 Ações Climáticas
                     </div>
                     <p>
@@ -147,7 +149,7 @@ export default function App() {
                     </p>
                   </div>
                   <div className="border-2 border-[#ECE9D8] border-dashed p-3">
-                    <div className="font-['VT323'] text-base text-gray-500 mb-2">
+                    <div className="font-sans text-base text-gray-500 mb-2">
                       🎨 Intervenções Artísticas
                     </div>
                     <p>
@@ -156,7 +158,7 @@ export default function App() {
                     </p>
                   </div>
                   <div className="border-2 border-[#ECE9D8] border-dashed p-3">
-                    <div className="font-['VT323'] text-base text-gray-500 mb-2">
+                    <div className="font-sans text-base text-gray-500 mb-2">
                       🤝 Inclusão Digital
                     </div>
                     <p>
@@ -167,8 +169,8 @@ export default function App() {
                 </div>
               )}
               {currentSection === "impacto" && (
-                <div className="font-['VT323'] text-lg text-gray-700 leading-relaxed space-y-3">
-                  <div className="font-['Press_Start_2P'] text-[11px] text-gray-600">
+                <div className="font-sans text-lg text-gray-700 leading-relaxed space-y-3">
+                  <div className="font-sans font-bold text-xl text-gray-600">
                     🌿 IMPACTO
                   </div>
                   <p>
@@ -178,7 +180,7 @@ export default function App() {
                     real na preservação ambiental e no fortalecimento cultural.
                   </p>
                   <div className="border-2 border-[#ECE9D8] border-dashed p-3">
-                    <div className="font-['VT323'] text-base text-gray-500 mb-2">
+                    <div className="font-sans text-base text-gray-500 mb-2">
                       📊 Números
                     </div>
                     <ul className="space-y-1 list-none">
@@ -193,7 +195,7 @@ export default function App() {
             </div>
           </XPWindow>
 
-          <div className="space-y-4">
+          <div className="space-y-4 hidden lg:block">
             <XPWindow
               title="navegação"
               icon="📌"
@@ -201,12 +203,12 @@ export default function App() {
               className="shadow-[3px_3px_10px_rgba(0,0,0,0.3)]"
             >
               <div className="space-y-3">
-                <div className="font-['Press_Start_2P'] text-[11px] text-gray-600 leading-relaxed">
+                <div className="font-sans font-bold text-xl text-gray-600 leading-relaxed">
                   RMBYZ — Recife/PE
                 </div>
 
                 <div className="border-2 border-[#ECE9D8] border-dashed p-2 mt-2">
-                  <div className="font-['VT323'] text-base text-gray-500 mb-1 pl-1">
+                  <div className="font-sans text-base text-gray-500 mb-1 pl-1">
                     📌 Seções
                   </div>
                   {sections.map((s) => (
@@ -221,12 +223,12 @@ export default function App() {
                     >
                       <span className="w-3">
                         {s === "início"
-                          ? "📁"
-                          : s === "sobre"
-                            ? "ℹ️"
-                            : s === "projetos"
-                              ? "🛠️"
-                              : "🌿"}
+                            ? "📁"
+                            : s === "sobre"
+                              ? "ℹ️"
+                              : s === "projetos"
+                                ? "🛠️"
+                                : "🌿"}
                       </span>{" "}
                       {s.charAt(0).toUpperCase() + s.slice(1)}
                     </div>
@@ -234,10 +236,10 @@ export default function App() {
                 </div>
 
                 <div className="border-2 border-[#ECE9D8] border-dashed p-2 mt-2">
-                  <div className="font-['VT323'] text-base text-gray-500 mb-1 pl-1">
+                  <div className="font-sans text-base text-gray-500 mb-1 pl-1">
                     📊 Info
                   </div>
-                  <div className="font-['VT323'] text-base text-gray-700 leading-relaxed">
+                  <div className="font-sans text-base text-gray-700 leading-relaxed">
                     📍 Recife — PE
                     <br />
                     🗓️ Fundado em 2020
@@ -249,10 +251,10 @@ export default function App() {
                 </div>
 
                 <div className="border-2 border-[#ECE9D8] border-dashed p-2 mt-2 text-center">
-                  <div className="font-['VT323'] text-base text-gray-500 mb-1">
+                  <div className="font-sans text-base text-gray-500 mb-1">
                     ♥ Contato
                   </div>
-                  <div className="font-['VT323'] text-base text-[#0054E3] mb-1">
+                  <div className="font-sans text-base text-[#0054E3] mb-1">
                     📷 @recifemangueboyz
                   </div>
                   <button
@@ -261,7 +263,7 @@ export default function App() {
                         "📧 contato@recifemangueboyz.com\n📷 Instagram: @recifemangueboyz",
                       )
                     }
-                    className="font-['VT323'] text-base w-full mt-1 px-3 py-1 bg-linear-to-b from-white via-[#ECE9D8] to-[#D6D0BD] border-2 border-[#003C74] rounded hover:brightness-105 active:from-[#D6D0BD] active:to-[#ECE9D8]"
+                    className="font-sans text-base w-full mt-1 px-3 py-1 bg-linear-to-b from-white via-[#ECE9D8] to-[#D6D0BD] border-2 border-[#003C74] rounded hover:brightness-105 active:from-[#D6D0BD] active:to-[#ECE9D8]"
                   >
                     📬 Entrar em contato
                   </button>
@@ -272,7 +274,7 @@ export default function App() {
         </div>
       </div>
 
-      <div className="text-center text-white/60 font-['VT323'] text-base pb-4 drop-shadow-[1px_1px_0_rgba(0,0,0,0.5)]">
+      <div className="text-center text-white/60 font-sans text-base pb-4 drop-shadow-[1px_1px_0_rgba(0,0,0,0.5)]">
         recifemangueboyz —{" "}
         <span className="text-pink-400 inline-block animate-pulse">♥</span>{" "}
         inclusão, cultura e preservação ambiental
