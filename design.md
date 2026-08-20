@@ -4,16 +4,50 @@
 
 Toda postagem deve ser um componente React em `src/componentes/` usando o prefixo `Postagem` (ex: `PostagemManguebit.tsx`). O componente não recebe props — o conteúdo é estático internamente.
 
+### Padrão de exibição: resumo + modal
+
+A postagem tem **dois estados de exibição**:
+
+1. **Resumo (visível no fluxo da página)** — mostra apenas o label, o título, os metadados (data, autor, gênero/tags) e um trecho curto. É clicável e abre o modal.
+2. **Modal (exibição completa)** — abre ao clicar no resumo, cobrindo quase toda a tela (`max-w-4xl` + `max-h-[92vh]`), com o conteúdo completo. O fundo fica escurecido com sobreposição (`bg-black/75 backdrop-blur-sm`). Fecha ao clicar na sobreposição, no botão `✕` ou pressionando `Esc`. O scroll do corpo é bloqueado enquanto aberto.
+
 ```tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function PostagemFoo() {
-  const [showSources, setShowSources] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
-    <article className="...">
-      {/* conteúdo */}
-    </article>
+    <>
+      {/* Resumo */}
+      <article onClick={() => setOpen(true)} className="...cursor-pointer...">
+        {/* label + título + metadados + trecho curto */}
+      </article>
+
+      {/* Modal */}
+      {open && (
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-3 sm:p-6">
+          <div onClick={() => setOpen(false)} className="absolute inset-0 bg-black/75 backdrop-blur-sm" />
+          <article className="relative ... max-w-4xl max-h-[92vh] overflow-y-auto">
+            <button onClick={() => setOpen(false)} className="...">✕</button>
+            {/* conteúdo completo */}
+          </article>
+        </div>
+      )}
+    </>
   );
 }
 ```
@@ -58,14 +92,32 @@ export function PostagemFoo() {
 
 ## Hierarquia do Post
 
+### Estado de resumo (visível na página)
+
 ```
-┌─ article ──────────────────────────────────┐
+┌─ article (clicável) ────────────────────────┐
 │  📝 POSTAGEM                  ← label seção │
 │                                              │
 │  Título                          ← h2 título │
 │  ─ ─ ─ ─ ─ ─ (borda tracejada)              │
 │                                              │
 │  📅 1991 · ✍️ Autor · 🏷️ Tag   ← metadados  │
+│                                              │
+│  Trecho curto do texto...        ← 2 linhas  │
+│                                              │
+│  ler postagem completa →         ← chamada   │
+└──────────────────────────────────────────────┘
+```
+
+### Estado completo (modal, ~tela inteira)
+
+```
+┌─ modal (max-w-4xl, max-h-[92vh]) ───────────┐
+│ ✕ ← botão fechar                            │
+│                                              │
+│  📝 POSTAGEM                                 │
+│  Título                                      │
+│  📅 1991 · ✍️ Autor · 🏷️ Tag                │
 │                                              │
 │  ┌─ destaque ─────────────────────────────┐  │
 │  │ 💡 VOCÊ SABIA?                        │  │
@@ -79,7 +131,6 @@ export function PostagemFoo() {
 │                                              │
 │  Parágrafo 3...                              │
 │                                              │
-│  ─ ─ ─ ─ ─ ─ (borda tracejada)              │
 │  ▶ ver fontes                    ← botão     │
 │  ┌─ referências ───────–───────┐             │
 │  │ 📚 REFERÊNCIAS              │  ← colaps.  │
@@ -87,6 +138,9 @@ export function PostagemFoo() {
 │  │ ▶ Item 2                    │             │
 │  └─────────────────────────────┘             │
 └──────────────────────────────────────────────┘
+
+Sobreposição: bg-black/75 + backdrop-blur-sm
+Fechar: clique na sobreposição, botão ✕ ou tecla Esc
 ```
 
 ## Elementos Obrigatórios
@@ -98,21 +152,21 @@ export function PostagemFoo() {
 
 ### 2. Label da seção
 ```tsx
-<div className="font-sans font-bold text-[10px] md:text-[11px] text-gray-500 mb-3 tracking-wider">
+<div className="font-sans text-xs text-gray-500 mb-3 tracking-wider">
   📝 POSTAGEM
 </div>
 ```
 
 ### 3. Título
 ```tsx
-<h2 className="font-sans font-bold text-[18px] md:text-[24px] text-[#0054E3] leading-snug border-b-2 border-dashed border-[#D6D0BD] pb-3 mb-3">
+<h2 className="font-sans font-bold text-lg md:text-2xl text-[#0054E3] leading-snug border-b-2 border-dashed border-[#D6D0BD] pb-3 mb-3">
   Título do Post
 </h2>
 ```
 
 ### 4. Metadados (data, autor, tags)
 ```tsx
-<div className="font-sans text-base md:text-lg text-[#3A6EA5] flex flex-wrap gap-x-5 gap-y-1 mb-5">
+<div className="font-sans text-base text-[#3A6EA5] flex flex-wrap gap-x-5 gap-y-1 mb-5">
   <span className="flex items-center gap-1">📅 ANO</span>
   <span className="flex items-center gap-1">✍️ Autor</span>
   <span className="flex items-center gap-1">🏷️ Tag1 | Tag2</span>
@@ -123,10 +177,10 @@ export function PostagemFoo() {
 Usar para destacar um fato/curiosidade principal do post.
 ```tsx
 <div className="bg-[#E6F0FA] border-l-4 border-[#0054E3] p-4 mb-6 rounded-r-md shadow-[inset_1px_1px_0_rgba(255,255,255,0.8)]">
-  <div className="font-sans font-bold text-[9px] md:text-[10px] text-[#0054E3] mb-2 tracking-wider">
+  <div className="font-sans text-xs text-[#0054E3] mb-2 tracking-wider">
     💡 VOCÊ SABIA?
   </div>
-  <p className="font-sans text-lg md:text-xl text-gray-700 leading-relaxed">
+  <p className="font-sans text-lg text-gray-700 leading-relaxed">
     Texto de destaque...
   </p>
 </div>
@@ -134,7 +188,7 @@ Usar para destacar um fato/curiosidade principal do post.
 
 ### 6. Corpo do texto
 ```tsx
-<div className="font-sans text-lg md:text-xl text-gray-700 leading-relaxed space-y-5">
+<div className="font-sans text-lg text-gray-700 leading-relaxed space-y-5">
   <p>Parágrafo 1</p>
   <p>Parágrafo 2</p>
   <!-- divisor opcional -->
@@ -147,7 +201,7 @@ Entre blocos de texto para pausa visual:
 ```tsx
 <div className="flex items-center justify-center gap-3 my-7 text-[#0054E3]/30 select-none">
   <span className="h-px flex-1 bg-linear-to-r from-transparent to-[#0054E3]/20" />
-  <span className="font-sans font-bold text-[10px] text-[#0054E3]/40">◆ ◆ ◆</span>
+  <span className="font-sans text-xs text-[#0054E3]/40">◆ ◆ ◆</span>
   <span className="h-px flex-1 bg-linear-to-r from-[#0054E3]/20 to-transparent" />
 </div>
 ```
@@ -157,13 +211,13 @@ Entre blocos de texto para pausa visual:
 <div className="mt-7 border-t-2 border-dashed border-[#D6D0BD] pt-5">
   <div className={`overflow-hidden transition-all duration-300 ease-in-out ${showSources ? "max-h-[500px] opacity-100 mb-3" : "max-h-0 opacity-0 mb-0"}`}>
     <div className="bg-[#FAF8F0] border-2 border-[#ECE9D8] p-4 rounded">
-      <div className="font-sans font-bold text-[9px] md:text-[10px] text-gray-500 mb-3 tracking-wider">
+      <div className="font-sans text-xs text-gray-500 mb-3 tracking-wider">
         📚 REFERÊNCIAS BIBLIOGRÁFICAS
       </div>
-      <ul className="font-sans text-base md:text-lg text-gray-700 space-y-2.5 list-none">
+      <ul className="font-sans text-base text-gray-700 space-y-2.5 list-none">
         {sources.map((s, i) => (
           <li key={i} className="flex gap-2.5">
-            <span className="text-[9px] text-[#0054E3] mt-1.5 shrink-0">▶</span>
+            <span className="text-xs text-[#0054E3] mt-1.5 shrink-0">▶</span>
             <span>{s.title}</span>
           </li>
         ))}
@@ -173,7 +227,7 @@ Entre blocos de texto para pausa visual:
 
   <button
     onClick={() => setShowSources((v) => !v)}
-    className="group font-sans text-base md:text-lg px-5 py-2 bg-linear-to-b from-white via-[#ECE9D8] to-[#D6D0BD] border-2 border-[#003C74] rounded shadow-[inset_1px_1px_0_rgba(255,255,255,0.9),inset_-1px_-1px_0_rgba(0,0,0,0.2)] hover:brightness-105 active:from-[#D6D0BD] active:to-[#ECE9D8] active:shadow-[inset_-1px_-1px_0_rgba(255,255,255,0.9),inset_1px_1px_0_rgba(0,0,0,0.2)] cursor-pointer transition-all flex items-center gap-2"
+    className="group font-sans text-base px-5 py-2 bg-linear-to-b from-white via-[#ECE9D8] to-[#D6D0BD] border-2 border-[#003C74] rounded shadow-[inset_1px_1px_0_rgba(255,255,255,0.9),inset_-1px_-1px_0_rgba(0,0,0,0.2)] hover:brightness-105 active:from-[#D6D0BD] active:to-[#ECE9D8] active:shadow-[inset_-1px_-1px_0_rgba(255,255,255,0.9),inset_1px_1px_0_rgba(0,0,0,0.2)] cursor-pointer transition-all flex items-center gap-2"
   >
     <span className={`inline-block transition-transform duration-300 ${showSources ? "rotate-90" : ""}`}>▶</span>
     {showSources ? "ocultar fontes" : "ver fontes"}
@@ -193,7 +247,7 @@ Entre blocos de texto para pausa visual:
 ## Responsividade
 
 - `p-5 md:p-7` — padding expande em desktop
-- Tamanhos de fonte usam `text-[X] md:text-[Y]`
+- Tamanhos de fonte usam a escala padrão do Tailwind (`text-xs` a `text-2xl`)
 - Metadados usam `flex-wrap` para quebrar em mobile
 - Referências e botão ocupam largura total em mobile
 
