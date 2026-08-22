@@ -35,9 +35,9 @@ export function StartMenu({ isOpen, onClose, onNavigate }: StartMenuProps) {
             action={() => { onNavigate?.("projetos"); onClose(); }}
           />
           <MenuItem
-            icon="🌿"
-            text="Impacto"
-            action={() => { onNavigate?.("impacto"); onClose(); }}
+            icon="👥"
+            text="Integrantes"
+            action={() => { onNavigate?.("integrantes"); onClose(); }}
           />
         </div>
         <div className="bg-[#D3E5FA] p-2">

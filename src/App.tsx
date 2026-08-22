@@ -1,7 +1,14 @@
 import { useState, useEffect } from "react";
-import { XPWindow, StartMenu, Taskbar, Postagem } from "./componentes";
+import { XPWindow, StartMenu, Taskbar, Postagem, PostagemSbNCajueiro, CardIntegrante } from "./componentes";
 
-const sections = ["início", "sobre", "projetos", "impacto"];
+const sections = ["início", "sobre", "projetos", "integrantes"];
+
+const sectionIcons: Record<string, string> = {
+  "início": "📁",
+  sobre: "ℹ️",
+  projetos: "🛠️",
+  integrantes: "👥",
+};
 
 export default function App() {
   const titles = ["RECIFEMANGUEBOYZ", "MANGUEBIT"];
@@ -62,13 +69,7 @@ export default function App() {
                   : "bg-[#ECE9D8] text-gray-600 hover:bg-white hover:text-[#0054E3]"
               }`}
             >
-              {s === "início"
-                ? "📁"
-                : s === "sobre"
-                  ? "ℹ️"
-                  : s === "projetos"
-                    ? "🛠️"
-                    : "🌿"}{ " "}
+              {sectionIcons[s]}{ " "}
               {s}
             </button>
           ))}
@@ -139,56 +140,22 @@ export default function App() {
                   <div className="font-sans font-bold text-xl text-gray-600">
                     🛠️ PROJETOS
                   </div>
-                  <div className="border-2 border-[#ECE9D8] border-dashed p-3">
-                    <div className="font-sans text-base text-gray-500 mb-2">
-                      🌿 Ações Climáticas
-                    </div>
-                    <p>
-                      Mutirões de plantio, limpeza de manguezais e oficinas de
-                      educação ambiental nas comunidades do Recife.
-                    </p>
-                  </div>
-                  <div className="border-2 border-[#ECE9D8] border-dashed p-3">
-                    <div className="font-sans text-base text-gray-500 mb-2">
-                      🎨 Intervenções Artísticas
-                    </div>
-                    <p>
-                      Murais coletivos, grafite, pixel arte e performances
-                      urbanas que ocupam espaços públicos e contam histórias.
-                    </p>
-                  </div>
-                  <div className="border-2 border-[#ECE9D8] border-dashed p-3">
-                    <div className="font-sans text-base text-gray-500 mb-2">
-                      🤝 Inclusão Digital
-                    </div>
-                    <p>
-                      Oficinas de tecnologia, programação e design para jovens
-                      de comunidades periféricas e aldeias indígenas.
-                    </p>
-                  </div>
+                  <PostagemSbNCajueiro />
                 </div>
               )}
-              {currentSection === "impacto" && (
+              {currentSection === "integrantes" && (
                 <div className="font-sans text-lg text-gray-700 leading-relaxed space-y-3">
                   <div className="font-sans font-bold text-xl text-gray-600">
-                    🌿 IMPACTO
+                    👥 INTEGRANTES
                   </div>
                   <p>
-                    Desde 2020, o RMBYZ já realizou mais de 50 ações
-                    diretas nas comunidades do Recife e região metropolitana,
-                    envolvendo centenas de participantes e gerando impacto
-                    real na preservação ambiental e no fortalecimento cultural.
+                    Conheça as pessoas que fazem o RMBYZ acontecer — artistas,
+                    ativistas e desenvolvedores com os pés no mangue.
                   </p>
-                  <div className="border-2 border-[#ECE9D8] border-dashed p-3">
-                    <div className="font-sans text-base text-gray-500 mb-2">
-                      📊 Números
-                    </div>
-                    <ul className="space-y-1 list-none">
-                      <li>🌳 +500 árvores plantadas</li>
-                      <li>🎨 +30 intervenções artísticas</li>
-                      <li>👥 +200 jovens impactados</li>
-                      <li>🏹 6 comunidades atendidas</li>
-                    </ul>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                    <CardIntegrante nome="Denilson Rocha" iniciais="DR" />
+                    <CardIntegrante nome="Anderson Pereira" iniciais="AP" />
+                    <CardIntegrante nome="Paulo Henrique" iniciais="PH" />
                   </div>
                 </div>
               )}
@@ -221,15 +188,7 @@ export default function App() {
                           : "text-gray-700 hover:text-[#0054E3]"
                       }`}
                     >
-                      <span className="w-3">
-                        {s === "início"
-                            ? "📁"
-                            : s === "sobre"
-                              ? "ℹ️"
-                              : s === "projetos"
-                                ? "🛠️"
-                                : "🌿"}
-                      </span>{" "}
+                      <span className="w-3">{sectionIcons[s]}</span>{" "}
                       {s.charAt(0).toUpperCase() + s.slice(1)}
                     </div>
                   ))}

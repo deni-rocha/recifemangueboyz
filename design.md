@@ -70,6 +70,22 @@ export function PostagemFoo() {
 | Botão "ver fontes" | branco → `#ECE9D8` → `#D6D0BD` | `from-white via-[#ECE9D8] to-[#D6D0BD]` |
 | Borda botão | `#003C74` | `border-[#003C74]` |
 
+### Variante para postagens de projetos (verde)
+
+Postagens na seção **projetos** usam paleta verde (tons derivados do gradiente
+do `XPWindow variant="green"` e do fundo do site), mantendo toda a estrutura:
+
+| Uso | Cor | Tailwind |
+|---|---|---|
+| Fundo do card | `#F5FBF0` → `#FAFEF7` → `#EBF3E2` (gradiente) | `from-[#F5FBF0] via-[#FAFEF7] to-[#EBF3E2]` |
+| Borda do card / Título / Destaque / Divisor | `#1E6B2E` | `border-[#1E6B2E]`, `text-[#1E6B2E]` |
+| Metadados | `#3C7A44` | `text-[#3C7A44]` |
+| Borda tracejada sob o título | `#C9D6BD` | `border-[#C9D6BD]` |
+| Fundo caixa de destaque | `#EAF6EC` | `bg-[#EAF6EC]` |
+| Borda botão "ver fontes" | `#14522A` | `border-[#14522A]` |
+
+Referências seguem neutras (`#FAF8F0` / `#ECE9D8`) como nas postagens normais.
+
 ## Tipografia
 
 ### Fontes
@@ -250,6 +266,57 @@ Entre blocos de texto para pausa visual:
 - Tamanhos de fonte usam a escala padrão do Tailwind (`text-xs` a `text-2xl`)
 - Metadados usam `flex-wrap` para quebrar em mobile
 - Referências e botão ocupam largura total em mobile
+
+## Cards de Integrantes
+
+Componente `CardIntegrante` (`src/componentes/CardIntegrante.tsx`), usado na
+seção **integrantes** para o perfil de cada membro do coletivo. Recebe props
+(`nome`, `iniciais`, `papel` opcional) e é renderizado em grade responsiva
+(`grid-cols-1 md:grid-cols-2 gap-3`) dentro da janela principal.
+
+```
+┌─ card ────────────────────────────────────┐
+│  ┌──────┐   Nome do Integrante            │
+│  │ DR   │   papel/função (opcional)       │
+│  └──────┘                                 │
+└───────────────────────────────────────────┘
+```
+
+### Estrutura
+
+```tsx
+<div className="bg-linear-to-b from-[#FFFBF0] via-[#FFFDF5] to-[#F5F0E0] border-2 border-[#ECE9D8] rounded p-3 flex items-center gap-4 shadow-[inset_1px_1px_0_rgba(255,255,255,0.9),inset_-1px_-1px_0_rgba(0,0,0,0.08),2px_2px_6px_rgba(0,0,0,0.2)] transition-all hover:border-[#0054E3] hover:shadow-[inset_1px_1px_0_rgba(255,255,255,0.9),inset_-1px_-1px_0_rgba(0,0,0,0.08),4px_4px_10px_rgba(0,0,0,0.3)]">
+  {/* Avatar com iniciais */}
+  <div className="w-14 h-14 shrink-0 rounded border-2 border-white/60 bg-linear-to-br from-yellow-300 to-red-400 flex items-center justify-center font-['Bitcount_Grid_Double'] text-xl text-white drop-shadow-[1px_1px_1px_rgba(0,0,0,0.5)] select-none">
+    {iniciais}
+  </div>
+  <div className="min-w-0">
+    <div className="font-sans font-bold text-lg text-gray-700 leading-snug truncate">
+      {nome}
+    </div>
+    {papel && (
+      <div className="font-sans text-base text-[#3A6EA5] leading-snug">
+        {papel}
+      </div>
+    )}
+  </div>
+</div>
+```
+
+### Detalhes
+
+| Elemento | Especificação |
+|---|---|
+| Fundo do card | gradiente papel `from-[#FFFBF0] via-[#FFFDF5] to-[#F5F0E0]` |
+| Borda | `#ECE9D8`; no hover vira `#0054E3` |
+| Avatar | quadrado 56px (`w-14 h-14`), cantos arredondados, gradiente amarelo→vermelho (`from-yellow-300 to-red-400`, mesmo do StartMenu), borda interna branca `border-white/60` |
+| Iniciais | fonte `Bitcount_Grid_Double` (títulos do site), branco com drop shadow |
+| Nome | Source Code Pro bold, `text-lg`, `text-gray-700` |
+| Papel (opcional) | `text-base`, `text-[#3A6EA5]` (cor dos metadados) |
+| Sombra | inset XP sutil; hover amplia a sombra externa |
+| Layout | `flex items-center gap-4`; nome com `truncate` para nomes longos |
+
+O tipo das props fica em `src/types/index.ts` (`CardIntegranteProps`).
 
 ## Como Criar um Novo Post
 

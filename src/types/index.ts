@@ -32,3 +32,9 @@ export interface MenuItemProps {
   text: string;
   action: () => void;
 }
+
+export interface CardIntegranteProps {
+  nome: string;
+  iniciais: string;
+  papel?: string;
+}
